@@ -23,5 +23,19 @@ namespace DemoWpf
         {
             InitializeComponent();
         }
+
+        private void guestButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow main = new MainWindow();
+            main.Closed += (s, args) => this.Show();
+            main.Show();
+            this.Hide();
+
+        }
+
+        private void enterButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
