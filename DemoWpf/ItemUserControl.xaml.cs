@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DemoWpf.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,26 @@ namespace DemoWpf
     /// </summary>
     public partial class ItemUserControl : UserControl
     {
-        public ItemUserControl()
+        public ItemUserControl(Good good)
         {
             InitializeComponent();
+            title.Content = good.category + " | " + good.label;
+            description.Content = good.desctiption;
+            fabric.Content = good.fabric;
+            provider.Content = good.provider;
+            price.Content = good.price.ToString();
+            unit_of_measure.Content = good.unit_of_measure;
+            count.Content = good.count.ToString();
+            discount.Content = good.discount.ToString();
+            if (good.discount > 15)
+            {
+                discountBorder.Background = (Brush)Application.Current.Resources["BigDiscountBrush"];
+            }
+            if(!(good.photo is null))
+            {
+                photo.Source = new BitmapImage(new Uri($"pack://application:,,,/pictures/{good.photo}", UriKind.Absolute));
+                //photo.Source = new BitmapImage(new Uri("/pictures/"+good.photo));
+            }
         }
     }
 }

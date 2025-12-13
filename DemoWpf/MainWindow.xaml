@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DemoWpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" FontFamily="Times New Roman" Icon="/Icon.ico">
+        Title="MainWindow" Height="450" Width="909" FontFamily="Times New Roman" Icon="/Icon.ico">
     <Grid>
-        <Label x:Name="fioLabel" Content="Label" 
+        <Label x:Name="fioLabel" Content="Гость" 
                HorizontalAlignment="Right" 
                Margin="0,10,10,0"
                VerticalAlignment="Top"/>
@@ -19,16 +19,13 @@
                 Width="64" 
                 Background="{DynamicResource AccentBrush}" Click="backButton_Click"/>
 
-        <ItemsControl d:ItemsSource="{d:SampleData ItemCount=10}">
-            <
-        </ItemsControl>
-        <ListView x:Name="MainListView" d:ItemsSource="{d:SampleData ItemCount=10}" Margin="80,40,0,0">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="85,50,10,10" Width="800">
+            <StackPanel x:Name="ItemsPanel" Orientation="Vertical" HorizontalAlignment="Center"/>
+        </ScrollViewer>
+
+
+
 
     </Grid>
 </Window>

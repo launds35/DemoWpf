@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DemoWpf.Models
 {
-    internal class Good
+    public class Good
     {
         public string article { get; set; }
         public string category { get; set; }
@@ -14,10 +14,11 @@ namespace DemoWpf.Models
         public string desctiption { get; set; }
         public string fabric { get; set; }
         public string provider { get; set; }
-        public float price { get; set; }
+        public double price { get; set; }
         public string unit_of_measure { get; set; }
         public int count { get; set; }
-        public float discount { get; set; }
+        public double discount { get; set; }
+        public string photo { get; set; }
 
     }
 }
