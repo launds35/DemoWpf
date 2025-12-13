@@ -19,5 +19,16 @@
                 Width="64" 
                 Background="{DynamicResource AccentBrush}" Click="backButton_Click"/>
 
+        <ItemsControl d:ItemsSource="{d:SampleData ItemCount=10}">
+            <
+        </ItemsControl>
+        <ListView x:Name="MainListView" d:ItemsSource="{d:SampleData ItemCount=10}" Margin="80,40,0,0">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
     </Grid>
 </Window>
