@@ -12,33 +12,41 @@ namespace DemoWpf.Data
 
         public static User Authorize(string login, string password)
         {
-            using (SqlConnection conn = Db.GetConnection())
+            try
             {
-                conn.Open();
+                using (SqlConnection conn = Db.GetConnection())
+                {
+                    conn.Open();
 
-                string sql = @"SELECT u.id_user, u.surname, u.name, u.last_name, r.role_name
+                    string sql = @"SELECT u.id_user, u.surname, u.name, u.last_name, r.role_name
                                FROM users u JOIN roles r ON r.id_role = u.id_role
                                WHERE u.login = @login AND u.password = @password";
 
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@login", login);
-                cmd.Parameters.AddWithValue("@password", password);
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    cmd.Parameters.AddWithValue("@login", login);
+                    cmd.Parameters.AddWithValue("@password", password);
 
-                using (SqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        return new User
+                        if (reader.Read())
                         {
-                            Id = reader.GetInt32(0),
-                            Surname = reader.GetString(1),
-                            Name = reader.GetString(2),
-                            LastName = reader.GetString(3),
-                            Role = reader.GetString(4)
-                        };
+                            return new User
+                            {
+                                Id = reader.GetInt32(0),
+                                Surname = reader.GetString(1),
+                                Name = reader.GetString(2),
+                                LastName = reader.GetString(3),
+                                Role = reader.GetString(4)
+                            };
+                        }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при работе с БД: {ex.Message}");
+            }
+
             return null;
         }
 

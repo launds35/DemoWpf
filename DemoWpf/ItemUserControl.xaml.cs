@@ -31,7 +31,7 @@ namespace DemoWpf
             price.Content = good.price.ToString();
             unit_of_measure.Content = good.unit_of_measure;
             count.Content = good.count.ToString();
-            discount.Content = good.discount.ToString();
+            discount.Content = good.discount.ToString() + "%";
             if (good.discount > 15)
             {
                 discountBorder.Background = (Brush)Application.Current.Resources["BigDiscountBrush"];
@@ -39,7 +39,6 @@ namespace DemoWpf
             if(!(good.photo is null))
             {
                 photo.Source = new BitmapImage(new Uri($"pack://application:,,,/pictures/{good.photo}", UriKind.Absolute));
-                //photo.Source = new BitmapImage(new Uri("/pictures/"+good.photo));
             }
         }
     }
