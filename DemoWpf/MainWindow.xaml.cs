@@ -25,12 +25,14 @@ namespace DemoWpf
     {
         public List<Good> Goods { get; set; }
         private ICollectionView goodsView;
+        private string Role {  get; set; }
 
-        public MainWindow(string role, string full_name)
+        public MainWindow(string role, string fullName)
         {
             InitializeComponent();
-            fioLabel.Content = full_name;
-            InitRoleComponents(role);
+            Role = role;
+            fioLabel.Content = fullName;
+            InitRoleComponents(Role);
 
             Goods = DbHelpers.GetGoodsList();
 
@@ -49,12 +51,12 @@ namespace DemoWpf
             if (string.IsNullOrWhiteSpace(search))
                 return true;
 
-            return good.category?.ToLower().Contains(search) == true ||
-                good.label?.ToLower().Contains(search) == true ||
-                good.provider?.ToLower().Contains(search) == true ||
-                good.article?.ToLower().Contains(search) == true ||
-                good.fabric?.ToLower().Contains(search) == true ||
-                good.desctiption?.ToLower().Contains(search) == true;
+            return good.Category?.ToLower().Contains(search) == true ||
+                good.Label?.ToLower().Contains(search) == true ||
+                good.Provider?.ToLower().Contains(search) == true ||
+                good.Article?.ToLower().Contains(search) == true ||
+                good.Fabric?.ToLower().Contains(search) == true ||
+                good.Desctiption?.ToLower().Contains(search) == true;
 
         }
 
@@ -70,7 +72,7 @@ namespace DemoWpf
 
             foreach (Good good in goodsView)
             {
-                ItemsPanel.Children.Add(new ItemUserControl(good));
+                ItemsPanel.Children.Add(new ItemUserControl(good, Role));
             }
         }
 
@@ -103,6 +105,12 @@ namespace DemoWpf
         private void backButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void Add_Click(object sender, RoutedEventArgs e)
+        {
+            CrudGoodsWindow addWindow = new CrudGoodsWindow(null);
+            addWindow.Show();
         }
     }
 }

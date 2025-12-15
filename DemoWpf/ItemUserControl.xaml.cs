@@ -21,25 +21,57 @@ namespace DemoWpf
     /// </summary>
     public partial class ItemUserControl : UserControl
     {
-        public ItemUserControl(Good good)
+
+        private Good GoodExemplar { get; set; }
+        public ItemUserControl(Good good, string role)
         {
             InitializeComponent();
-            title.Content = good.category + " | " + good.label;
-            description.Content = good.desctiption;
-            fabric.Content = good.fabric;
-            provider.Content = good.provider;
-            price.Content = good.price.ToString();
-            unit_of_measure.Content = good.unit_of_measure;
-            count.Content = good.count.ToString();
-            discount.Content = good.discount.ToString() + "%";
-            if (good.discount > 15)
+            GoodExemplar = good;
+
+            if (role != "Администратор")
+            {
+                Edit.Visibility = Visibility.Collapsed;
+            }
+
+            title.Content = good.Category + " | " + good.Label;
+            description.Content = "Описание товара: " + good.Desctiption;
+            fabric.Content = "Производитель: " + good.Fabric;
+            provider.Content = "Поставщик: " + good.Provider;
+
+            if (good.Discount > 0)
+            {
+                decimal newPrice = (decimal)good.Price - ((decimal)good.Price * ((decimal)good.Discount / 100));
+                price.Text = good.Price.ToString();
+                price.TextDecorations = TextDecorations.Strikethrough;
+                price.Foreground = Brushes.Red;
+                priceDiscount.Text = newPrice.ToString();
+
+            } 
+            else
+            {
+                price.Text = good.Price.ToString();
+                priceDiscount.Text = "";
+            }
+
+            unit_of_measure.Content = "Единица измерения: " + good.Unit_of_measure;
+            count.Content = "Количество на складе: " + good.Count.ToString();
+            discount.Content = good.Discount.ToString() + "%";
+
+            if (good.Discount > 15)
             {
                 discountBorder.Background = (Brush)Application.Current.Resources["BigDiscountBrush"];
             }
-            if(!(good.photo is null))
+
+            if(!(good.Photo is null))
             {
-                photo.Source = new BitmapImage(new Uri($"pack://application:,,,/pictures/{good.photo}", UriKind.Absolute));
+                photo.Source = new BitmapImage(new Uri($"pack://application:,,,/pictures/{good.Photo}", UriKind.Absolute));
             }
+        }
+
+        private void Edit_Click(object sender, RoutedEventArgs e)
+        {
+            CrudGoodsWindow editWindow = new CrudGoodsWindow(GoodExemplar);
+            editWindow.Show();
         }
     }
 }

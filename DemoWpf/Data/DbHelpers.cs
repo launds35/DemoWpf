@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Reflection.Emit;
 using System.Windows;
 using System.Windows.Documents;
 
@@ -40,6 +41,7 @@ namespace DemoWpf.Data
                             };
                         }
                     }
+                    conn.Close();
                 }
             }
             catch (Exception ex)
@@ -48,6 +50,68 @@ namespace DemoWpf.Data
             }
 
             return null;
+        }
+
+        public static List<ComboBoxItems> GetCategories()
+        {
+           var list = new List<ComboBoxItems>();
+
+            using (SqlConnection conn = Db.GetConnection())
+            {
+                conn.Open();
+
+                string sql = @"SELECT id_category, category_name FROM categories";
+
+                SqlCommand cmd = new SqlCommand(sql, conn);
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        list.Add(new ComboBoxItems
+                        {
+                            Id = reader.GetInt32(0),
+                            Name = reader.GetString(1)
+                        });
+                    }
+                }
+
+                return list;
+            }
+
+            throw new Exception("Не удалось получить ID");
+        }
+
+        public static bool AddGood(Good good)
+        {
+            try
+            {
+                using (SqlConnection conn = Db.GetConnection())
+                {
+                    conn.Open();
+
+                    string sql =
+                        @"INTERT categories (category_name) VALUES (@good.category);
+                        INSERT labels (label) VALUES (@good.label);
+                        INSERT providers (provider_name) VALUES (@good.provider);
+                        INSERT fabrics (fabric) VALUES (@good.fabric);
+                        INSERT goods (article, id_category) VALUES (@good.fabric);";
+
+
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+
+
+                    conn.Close();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при добавлении записи: {ex.Message}", "Ошибка при работе с БД");
+                return false;
+            }
+
         }
 
         public static List<Good> GetGoodsList()
@@ -74,17 +138,17 @@ namespace DemoWpf.Data
                         {
                             list.Add(new Good
                             {
-                                article = reader.GetString(0),
-                                category = reader.IsDBNull(1) ? null : reader.GetString(1),
-                                label = reader.IsDBNull(2) ? null : reader.GetString(2),
-                                desctiption = reader.IsDBNull(3) ? null : reader.GetString(3),
-                                fabric = reader.IsDBNull(4) ? null : reader.GetString(4),
-                                provider = reader.IsDBNull(5) ? null : reader.GetString(5),
-                                price = reader.IsDBNull(6) ? 0f : (float)reader.GetDouble(6),
-                                unit_of_measure = reader.IsDBNull(7) ? null : reader.GetString(7),
-                                count = reader.IsDBNull(8) ? 0 : Convert.ToInt32(reader[8]),
-                                discount = reader.IsDBNull(9) ? 0f : (float)reader.GetDouble(9),
-                                photo = reader.IsDBNull(10) ? null : reader.GetString(10)
+                                Article = reader.GetString(0),
+                                Category = reader.IsDBNull(1) ? null : reader.GetString(1),
+                                Label = reader.IsDBNull(2) ? null : reader.GetString(2),
+                                Desctiption = reader.IsDBNull(3) ? null : reader.GetString(3),
+                                Fabric = reader.IsDBNull(4) ? null : reader.GetString(4),
+                                Provider = reader.IsDBNull(5) ? null : reader.GetString(5),
+                                Price = reader.IsDBNull(6) ? 0f : (float)reader.GetDouble(6),
+                                Unit_of_measure = reader.IsDBNull(7) ? null : reader.GetString(7),
+                                Count = reader.IsDBNull(8) ? 0 : Convert.ToInt32(reader[8]),
+                                Discount = reader.IsDBNull(9) ? 0f : (float)reader.GetDouble(9),
+                                Photo = reader.IsDBNull(10) ? null : reader.GetString(10)
                             }
                             );
                         }

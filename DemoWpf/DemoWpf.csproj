@@ -63,6 +63,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="CrudGoodsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -82,6 +86,9 @@
     <Compile Include="Auth.xaml.cs">
       <DependentUpon>Auth.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CrudGoodsWindow.xaml.cs">
+      <DependentUpon>CrudGoodsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Data\Db.cs" />
     <Compile Include="Data\DbHelpers.cs" />
     <Compile Include="ItemUserControl.xaml.cs">
@@ -93,6 +100,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\ComboBoxItems.cs" />
     <Compile Include="Models\Good.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

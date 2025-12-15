@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DemoWpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="909" FontFamily="Times New Roman" Icon="/Icon.ico">
+        Title="MainWindow" Height="450" Width="930" FontFamily="Times New Roman" Icon="/Icon.ico">
     <Grid>
         <Label x:Name="fioLabel" Content="Гость" 
                HorizontalAlignment="Right" 
@@ -17,20 +17,20 @@
                 Margin="10,10,0,0" 
                 VerticalAlignment="Top" 
                 Height="26" 
-                Width="64" 
+                Width="73" 
                 Background="{DynamicResource AccentBrush}" Click="backButton_Click"/>
 
 
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="85,50,10,10" Width="800">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="85,50,10,10" Width="820">
             <StackPanel x:Name="ItemsPanel" Orientation="Vertical" HorizontalAlignment="Center"/>
         </ScrollViewer>
-        <Button x:Name="Add" Content="Назад" 
+        <Button x:Name="Add" Content="Добавить" 
             HorizontalAlignment="Left" 
             Margin="10,50,0,0" 
             VerticalAlignment="Top" 
             Height="26" 
-            Width="64" 
-            Background="{DynamicResource AccentBrush}" Click="backButton_Click"/>
+            Width="73" 
+            Background="{DynamicResource AccentBrush}" Click="Add_Click"/>
         <TextBox x:Name="SearchBox" HorizontalAlignment="Left" Margin="111,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="151" Height="26" TextChanged="SearchBox_TextChanged" FontSize="18"/>
 
 

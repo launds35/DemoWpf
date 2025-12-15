@@ -8,17 +8,17 @@ namespace DemoWpf.Models
 {
     public class Good
     {
-        public string article { get; set; }
-        public string category { get; set; }
-        public string label { get; set; }
-        public string desctiption { get; set; }
-        public string fabric { get; set; }
-        public string provider { get; set; }
-        public double price { get; set; }
-        public string unit_of_measure { get; set; }
-        public int count { get; set; }
-        public double discount { get; set; }
-        public string photo { get; set; }
+        public string Article { get; set; }
+        public string Category { get; set; }
+        public string Label { get; set; }
+        public string Desctiption { get; set; }
+        public string Fabric { get; set; }
+        public string Provider { get; set; }
+        public double Price { get; set; }
+        public string Unit_of_measure { get; set; }
+        public int Count { get; set; }
+        public double Discount { get; set; }
+        public string Photo { get; set; }
 
     }
 }
