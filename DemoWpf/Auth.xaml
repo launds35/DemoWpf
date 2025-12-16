@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DemoWpf"
         mc:Ignorable="d"
         Background="{StaticResource MainBackgroundBrush}"
-        Title="Auth" Height="342" Width="246" FontFamily="Times New Roman" FontSize="14" Icon="/Icon.ico">
+        Title="Авторизация" Height="342" Width="246" FontFamily="Times New Roman" FontSize="14" Icon="/Icon.ico">
     <Grid VerticalAlignment="Center" Margin="0,0,0,30">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="85*"/>

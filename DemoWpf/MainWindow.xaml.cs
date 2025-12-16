@@ -32,13 +32,14 @@ namespace DemoWpf
             InitializeComponent();
             Role = role;
             fioLabel.Content = fullName;
-            InitRoleComponents(Role);
 
             Goods = DbHelpers.GetGoodsList();
 
             goodsView = CollectionViewSource.GetDefaultView(Goods);
             goodsView.Filter = FilterGoods;
+
             RenderItems();
+            InitRoleComponents(Role);
         }
 
         private void LoadGoods()
@@ -61,17 +62,31 @@ namespace DemoWpf
 
             string search = SearchBox.Text?.ToLower();
 
-            if (string.IsNullOrWhiteSpace(search))
-                return true;
-
-            return good.Category?.ToLower().Contains(search) == true ||
+            bool searchMatch = string.IsNullOrWhiteSpace(search) ||
+                good.Category?.ToLower().Contains(search) == true ||
                 good.Label?.ToLower().Contains(search) == true ||
                 good.Provider?.ToLower().Contains(search) == true ||
                 good.Article?.ToLower().Contains(search) == true ||
                 good.Fabric?.ToLower().Contains(search) == true ||
                 good.Desctiption?.ToLower().Contains(search) == true;
 
+            bool providerMatch = true;
+
+            if (FilterBox.SelectedItem is ComboBoxItems selectedProvider)
+            {
+                if (selectedProvider.Id == 0)
+                {
+                    providerMatch = true;
+                }
+                else
+                {
+                    providerMatch = good.Provider == selectedProvider.Name;
+                }
+            }
+                         
+            return searchMatch && providerMatch;
         }
+
 
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -90,34 +105,55 @@ namespace DemoWpf
             }
         }
 
+        private void InitFilterBox()
+        {
+            List<ComboBoxItems> providers = DbHelpers.GetProviders();
+            providers.Insert(0, new ComboBoxItems { Id = 0, Name = "Все поставщики" });
+            FilterBox.ItemsSource = providers;
+            FilterBox.DisplayMemberPath = "Name";
+            FilterBox.SelectedValuePath = "Id";
+            FilterBox.SelectedIndex = 0;
+        }
+
         private void InitRoleComponents(string role)
         {
             if (role == null)
             {
-                SearchBox.Visibility = Visibility.Collapsed;
                 this.Title = "Главное окно (Гость)";
                 fioLabel.Visibility = Visibility.Collapsed;
-                Add.Visibility = Visibility.Collapsed;
                 backButton.Content = "Назад";
-            }
-            else if (role == "Администратор")
-            {
-                this.Title = "Главное окно (Администратор)";
 
-            }
-            else if (role == "Менеджер") 
-            {
-                this.Title = "Главное окно (Менеджер)";
                 Add.Visibility = Visibility.Collapsed;
-
+                SortLabel.Visibility = Visibility.Collapsed;    
+                FilterLabel.Visibility = Visibility.Collapsed;    
+                SearchLabel.Visibility = Visibility.Collapsed;
+                SearchBox.Visibility = Visibility.Collapsed;
+                FilterBox.Visibility = Visibility.Collapsed;
+                SortBox.Visibility = Visibility.Collapsed;
             }
             else if (role == "Авторизированный клиент")
             {
                 this.Title = "Главное окно (Авторизированный клиент)";
+
                 Add.Visibility = Visibility.Collapsed;
-
+                SortLabel.Visibility = Visibility.Collapsed;
+                FilterLabel.Visibility = Visibility.Collapsed;
+                SearchLabel.Visibility = Visibility.Collapsed;
+                SearchBox.Visibility = Visibility.Collapsed;
+                FilterBox.Visibility = Visibility.Collapsed;
+                SortBox.Visibility = Visibility.Collapsed;
             }
-
+            else if (role == "Менеджер")
+            {
+                this.Title = "Главное окно (Менеджер)";
+                Add.Visibility = Visibility.Collapsed;
+                InitFilterBox();
+            }
+            else if (role == "Администратор")
+            {
+                this.Title = "Главное окно (Администратор)";
+                InitFilterBox();
+            }
         }
 
         private void backButton_Click(object sender, RoutedEventArgs e)
@@ -130,7 +166,39 @@ namespace DemoWpf
             CrudGoodsWindow addWindow = new CrudGoodsWindow(null);
             addWindow.Closed += (s, args) => LoadGoods();
             addWindow.Show();
-            
+        }
+
+        private void SortBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (goodsView == null)
+                return;
+
+            goodsView.SortDescriptions.Clear();
+
+            switch (SortBox.SelectedIndex)
+            {
+                case 1:
+                    goodsView.SortDescriptions.Add(
+                        new SortDescription(nameof(Good.Count), ListSortDirection.Ascending)    
+                    );
+                    break;
+                case 2:
+                    goodsView.SortDescriptions.Add(
+                        new SortDescription(nameof(Good.Count), ListSortDirection.Descending)
+                    );
+                    break;
+            }
+
+            goodsView.Refresh();
+            RenderItems();
+        }
+
+        private void FilterBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (goodsView == null) return;
+
+            goodsView.Refresh();
+            RenderItems();
         }
     }
 }

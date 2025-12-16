@@ -16,6 +16,7 @@ namespace DemoWpf
 
         private Good GoodExemplar { get; set; }
         public event Action Edited;
+        private bool _isEditing = false;
         private void RefreshItem()
         {
             title.Content = GoodExemplar.Category + " | " + GoodExemplar.Label;
@@ -71,9 +72,21 @@ namespace DemoWpf
 
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
-            CrudGoodsWindow editWindow = new CrudGoodsWindow(GoodExemplar);
-            editWindow.Closed += (s, args) => Edited?.Invoke();
-            editWindow.Show();
+            if (_isEditing)
+            {
+                return;
+            }
+            _isEditing = true;
+            CrudGoodsWindow editWindow = new CrudGoodsWindow(GoodExemplar)
+            {
+                Owner = Application.Current.MainWindow
+            };
+            editWindow.Closed += (s, args) =>
+            {
+                Edited?.Invoke();
+                _isEditing = false;
+            };
+            editWindow.ShowDialog();
         }
     }
 }

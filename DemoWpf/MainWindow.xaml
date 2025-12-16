@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DemoWpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="930" FontFamily="Times New Roman" Icon="/Icon.ico">
+        Title="MainWindow" Height="550" Width="1000" FontFamily="Times New Roman" Icon="/Icon.ico">
     <Grid>
         <Label x:Name="fioLabel" Content="Гость" 
                HorizontalAlignment="Right" 
@@ -21,7 +21,7 @@
                 Background="{DynamicResource AccentBrush}" Click="backButton_Click"/>
 
 
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="85,50,10,10" Width="820">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="105,50,10,10" Width="830">
             <StackPanel x:Name="ItemsPanel" Orientation="Vertical" HorizontalAlignment="Center"/>
         </ScrollViewer>
         <Button x:Name="Add" Content="Добавить" 
@@ -31,10 +31,18 @@
             Height="26" 
             Width="73" 
             Background="{DynamicResource AccentBrush}" Click="Add_Click"/>
-        <TextBox x:Name="SearchBox" HorizontalAlignment="Left" Margin="111,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="151" Height="26" TextChanged="SearchBox_TextChanged" FontSize="18"/>
-
-
-
-
+        <TextBox x:Name="SearchBox" HorizontalAlignment="Left" Margin="152,9,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="151" Height="26" TextChanged="SearchBox_TextChanged" FontSize="18"/>
+        
+        <ComboBox x:Name="SortBox" HorizontalAlignment="Left" Margin="399,9,0,0" VerticalAlignment="Top" Width="126" Height="24" BorderBrush="{DynamicResource AccentBrush}" SelectionChanged="SortBox_SelectionChanged">
+            <ComboBoxItem Content="Без сортировки" IsSelected="True" FontFamily="Times New Roman"></ComboBoxItem>
+            <ComboBoxItem Content="По возрастанию" IsSelected="False" FontFamily="Times New Roman"></ComboBoxItem>
+            <ComboBoxItem Content="По убыванию" IsSelected="False" FontFamily="Times New Roman"></ComboBoxItem>
+        </ComboBox>
+        <ComboBox x:Name="FilterBox" HorizontalAlignment="Left" Margin="599,10,0,0" VerticalAlignment="Top" Width="126" Height="24" SelectionChanged="FilterBox_SelectionChanged">
+        </ComboBox>
+        
+        <Label x:Name="SortLabel" Content="Сортировка:" HorizontalAlignment="Left" Margin="326,10,0,0" VerticalAlignment="Top" FontFamily="Times New Roman"/>
+        <Label x:Name="FilterLabel" Content="Фильтр:" HorizontalAlignment="Left" Margin="546,10,0,0" VerticalAlignment="Top" FontFamily="Times New Roman"/>
+        <Label x:Name="SearchLabel" Content="Поиск:" HorizontalAlignment="Left" Margin="106,10,0,0" VerticalAlignment="Top" FontFamily="Times New Roman"/>
     </Grid>
 </Window>
