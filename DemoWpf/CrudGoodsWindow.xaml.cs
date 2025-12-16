@@ -1,19 +1,12 @@
 ﻿using DemoWpf.Data;
 using DemoWpf.Models;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
 
 namespace DemoWpf
 {
@@ -23,10 +16,20 @@ namespace DemoWpf
     public partial class CrudGoodsWindow : Window
     {
         private Good CurrentGood { get; set; }
+        private string PhotoName = null;
         public CrudGoodsWindow(Good good)
         {
             InitializeComponent();
             CurrentGood = good;
+            if (CurrentGood != null)
+            {
+                PhotoName = CurrentGood.Photo;
+            } else
+            {
+                PhotoName = null;
+            }
+                FileLabel.Content = $"Фото ({PhotoName})";
+
             List<ComboBoxItems> categories = DbHelpers.GetCategories();
             List<ComboBoxItems> fabrics = DbHelpers.GetFabrics();
             List<ComboBoxItems> labels = DbHelpers.GetLabels();
@@ -107,17 +110,11 @@ namespace DemoWpf
                     MessageBox.Show("Заполните все выпадающие списки");
                     return;
                 }
+
                 var category = (ComboBoxItems)Category.SelectedItem;
                 var fabric = (ComboBoxItems)Fabric.SelectedItem;
                 var label = (ComboBoxItems)Label.SelectedItem;
                 var provider = (ComboBoxItems)Provider.SelectedItem;
-
-                string _photo = null;
-                if (!(CurrentGood is null))
-                {
-                    _photo = CurrentGood.Photo;
-                }
-                
 
                 Good newGood = new Good
                     {
@@ -131,8 +128,8 @@ namespace DemoWpf
                         Fabric = fabric.Name,
                         Label = label.Name,
                         Provider = provider.Name,
-                        Photo = _photo
-                    };
+                        Photo = PhotoName
+                };
 
                 if (AddButton.Content.ToString() == "Редактировать")
                 {
@@ -148,7 +145,9 @@ namespace DemoWpf
                         newGood.Price,
                         newGood.Unit_of_measure,
                         newGood.Count,
-                        newGood.Discount);
+                        newGood.Discount,
+                        newGood.Photo
+                    );
 
                     if (result)
                     {
@@ -167,7 +166,8 @@ namespace DemoWpf
                         newGood.Price,
                         newGood.Unit_of_measure,
                         newGood.Count,
-                        newGood.Discount
+                        newGood.Discount,
+                        newGood.Photo
                     );
 
                     if (result)
@@ -179,6 +179,83 @@ namespace DemoWpf
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
+            }
+        }
+
+        private void FileButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Title = "Выберите изображения";
+                openFileDialog.Filter = "Изображения (*.jpg;*.png)|*.jpg;*.png";
+                openFileDialog.Multiselect = false;
+
+
+                if (openFileDialog.ShowDialog() != true)
+                    return;
+
+                string sourcePath = openFileDialog.FileName;
+
+                string pictureDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "pictures");
+                Directory.CreateDirectory(pictureDir);
+
+
+                string fileName = Path.GetFileName(sourcePath);
+                string targetPath = Path.Combine(pictureDir, fileName);
+
+                ResizeAndSaveImage(sourcePath, targetPath, 300, 200);
+                FileLabel.Content = $"Фото ({fileName})";
+                PhotoName = fileName;
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            
+            
+        }
+        private void ResizeAndSaveImage(string sourcePath, string targetPath, int width, int height)
+        {
+            BitmapImage bitmap = new BitmapImage();
+            
+            using (FileStream fs = new FileStream(sourcePath, FileMode.Open, FileAccess.Read))
+            {
+                bitmap.BeginInit();
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.StreamSource = fs;
+                bitmap.DecodePixelWidth = width;
+                bitmap.DecodePixelHeight = height;
+                bitmap.EndInit();
+            }
+
+            BitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(bitmap));
+
+            using (FileStream fs = new FileStream(targetPath, FileMode.Create, FileAccess.Write))
+            {
+                encoder.Save(fs);
+            }
+        }
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show(
+                "Вы уверены, что хотите удалить этот товар?",
+                "Подтверждение удаления",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning
+            );
+            
+            if(result == MessageBoxResult.Yes)
+            {
+                DbHelpers.DeleteGood(CurrentGood.Article);
+                Article.Text = "";
+                Description.Text = "";
+                Price.Text = "";
+                Count.Text = "";
+                Discount.Text = "";
+                UnitOfMeasure.Text = "";
+                MessageBox.Show("Товар удален!");
             }
         }
     }

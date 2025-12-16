@@ -1,5 +1,6 @@
 ﻿using DemoWpf.Models;
 using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -50,7 +51,18 @@ namespace DemoWpf
 
             if (!(GoodExemplar.Photo is null))
             {
-                photo.Source = new BitmapImage(new Uri($"pack://application:,,,/pictures/{GoodExemplar.Photo}", UriKind.Absolute));
+                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "pictures", GoodExemplar.Photo);
+
+                if (File.Exists(path))
+                {
+                    BitmapImage bmp = new BitmapImage();
+                    bmp.BeginInit();
+                    bmp.UriSource = new Uri(path);
+                    bmp.CacheOption = BitmapCacheOption.OnLoad;
+                    bmp.EndInit();
+                    photo.Source = bmp;
+
+                }
             }
 
         }

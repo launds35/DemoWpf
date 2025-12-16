@@ -2,10 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Reflection.Emit;
-using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Documents;
+
 
 namespace DemoWpf.Data
 {
@@ -204,7 +202,7 @@ namespace DemoWpf.Data
 
         public static bool AddGood(string article, int idCategory, int idLabel,
                                       string description, int idFabric, int idProvider,
-                                      double price, string unitOfMeasure, int count, double discount)
+                                      double price, string unitOfMeasure, int count, double discount, string photo)
         {
             try
             {
@@ -215,10 +213,10 @@ namespace DemoWpf.Data
                     string sql = @"INSERT INTO goods (
                                    article, id_category, id_label, 
                                    description, id_fabric, id_provider, price,
-                                   unit_of_measure, count, sale)
+                                   unit_of_measure, count, sale, photo)
                                    VALUES (@article, @id_category, @id_label, 
                                    @description, @id_fabric, @id_provider, @price,
-                                   @unit_of_measure, @count, @sale)";
+                                   @unit_of_measure, @count, @sale, @photo)";
 
 
                     SqlCommand cmd = new SqlCommand(sql, connection);
@@ -232,6 +230,7 @@ namespace DemoWpf.Data
                     cmd.Parameters.AddWithValue("@unit_of_measure", unitOfMeasure);
                     cmd.Parameters.AddWithValue("@count", count);
                     cmd.Parameters.AddWithValue("@sale", discount);
+                    cmd.Parameters.AddWithValue("@photo", photo);
                     int row_affected = cmd.ExecuteNonQuery();
 
                     return row_affected > 0;
@@ -253,7 +252,7 @@ namespace DemoWpf.Data
                 {
                     connection.Open();
 
-                    string sql = @"DELETE FROM TABLE goods WHERE goods.article = @article";
+                    string sql = @"DELETE FROM goods WHERE goods.article = @article";
 
                     SqlCommand cmd = new SqlCommand(sql, connection);
                     cmd.Parameters.AddWithValue("@article", article);
@@ -270,7 +269,7 @@ namespace DemoWpf.Data
 
         public static bool UpdateGood(string article, string newArticle, int idCategory, int idLabel, 
                                       string description, int idFabric, int idProvider, 
-                                      double price, string unitOfMeasure, int count, double discount)
+                                      double price, string unitOfMeasure, int count, double discount, string photo)
         {
             try
             {
@@ -281,7 +280,7 @@ namespace DemoWpf.Data
                     string sql = @"UPDATE goods 
                                    SET article = @newArticle, id_category = @id_category, id_label = @id_label, 
                                    description = @description, id_fabric = @id_fabric, id_provider = @id_provider, price = @price,
-                                   unit_of_measure = @unit_of_measure, count = @count, sale = @sale
+                                   unit_of_measure = @unit_of_measure, count = @count, sale = @sale, photo = @photo
                                    WHERE article = @article";
 
                     SqlCommand cmd = new SqlCommand(sql, connection);
@@ -296,6 +295,7 @@ namespace DemoWpf.Data
                     cmd.Parameters.AddWithValue("@unit_of_measure", unitOfMeasure);
                     cmd.Parameters.AddWithValue("@count", count);
                     cmd.Parameters.AddWithValue("@sale", discount);
+                    cmd.Parameters.AddWithValue("@photo", photo);
 
                     int row_affected = cmd.ExecuteNonQuery();
 

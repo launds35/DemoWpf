@@ -8,8 +8,8 @@
         Title="Добавление товара" Height="450" Width="800" Icon="/Icon.ico" Topmost="True">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="12*"/>
+            <RowDefinition Height="10*"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -20,6 +20,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
@@ -36,7 +37,7 @@
             <ComboBox x:Name="Label" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" Margin="0,17,0,0" VerticalAlignment="Center" Width="180" FontFamily="Times New Roman"/>
 
             <Label Grid.Row="0" Grid.Column="3" Content="Описание" HorizontalAlignment="Left" Margin="7,0,0,0" VerticalAlignment="Top" Height="27" FontFamily="Times New Roman"/>
-            <TextBox x:Name="Description" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center" Margin="0,23,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="180" FontFamily="Times New Roman"/>
+            <TextBox x:Name="Description" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center" Margin="0,15,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="180" FontFamily="Times New Roman"/>
 
 
 
@@ -58,7 +59,12 @@
 
             <Label Grid.Row="2" Grid.Column="1" Content="Скидка" HorizontalAlignment="Left" Margin="7,0,0,0" VerticalAlignment="Top" Height="27" FontFamily="Times New Roman"/>
             <TextBox x:Name="Discount" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Margin="0,15,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="180" FontFamily="Times New Roman"/>
-            <Button x:Name="AddButton" Grid.Column="3" Content="Добавить" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Height="26" Width="180" FontFamily="Times New Roman" Background="{DynamicResource AccentBrush}" Click="AddButton_Click"/>
+            <Button x:Name="AddButton" Grid.Column="3" Content="Добавить" HorizontalAlignment="Center" Grid.Row="2" Margin="0,5,0,0" VerticalAlignment="Center" Height="26" Width="180" FontFamily="Times New Roman" Background="{DynamicResource AccentBrush}" Click="AddButton_Click"/>
+
+            <Label x:Name="FileLabel" Grid.Row="2" Grid.Column="2" Content="Фото" HorizontalAlignment="Left" Margin="7,0,0,0" VerticalAlignment="Top" Height="27" FontFamily="Times New Roman"/>
+            <Button x:Name="FileButton" Grid.Column="2" Content="Выбрать файл" HorizontalAlignment="Center" Grid.Row="2" Margin="0,15,0,0" VerticalAlignment="Center"  Width="180" FontFamily="Times New Roman" Background="{DynamicResource AccentBrush}" Height="15.8" Click="FileButton_Click"/>
+
+            <Button x:Name="DeleteButton" Grid.Column="0" Content="Удалить" HorizontalAlignment="Center" Grid.Row="3" Margin="0,5,0,0" VerticalAlignment="Center" Height="26" Width="180" FontFamily="Times New Roman" Background="{DynamicResource AccentBrush}" Click="DeleteButton_Click"/>
 
         </Grid>
 
