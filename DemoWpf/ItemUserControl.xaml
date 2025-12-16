@@ -114,7 +114,6 @@
                VerticalAlignment="Center"
                    FontSize="30"/>
             </Border>
-            <Button x:Name="Edit" Content="Редактировать" HorizontalAlignment="Right" Height="20" Margin="0,0,0,0" VerticalAlignment="Top" Grid.Column="2" Background="{DynamicResource AccentBrush}" FontFamily="Times New Roman" Click="Edit_Click"/>
 
         </Grid>
 

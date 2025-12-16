@@ -1,18 +1,10 @@
 ﻿using DemoWpf.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace DemoWpf
 {
@@ -23,54 +15,64 @@ namespace DemoWpf
     {
 
         private Good GoodExemplar { get; set; }
+        public event Action Edited;
+        private void RefreshItem()
+        {
+            title.Content = GoodExemplar.Category + " | " + GoodExemplar.Label;
+            description.Content = "Описание товара: " + GoodExemplar.Desctiption;
+            fabric.Content = "Производитель: " + GoodExemplar.Fabric;
+            provider.Content = "Поставщик: " + GoodExemplar.Provider;
+
+            if (GoodExemplar.Discount > 0)
+            {
+                decimal newPrice = (decimal)GoodExemplar.Price - ((decimal)GoodExemplar.Price * ((decimal)GoodExemplar.Discount / 100));
+                price.Text = GoodExemplar.Price.ToString();
+                price.TextDecorations = TextDecorations.Strikethrough;
+                price.Foreground = Brushes.Red;
+                priceDiscount.Text = newPrice.ToString();
+
+            }
+            else
+            {
+                price.Text = GoodExemplar.Price.ToString();
+                priceDiscount.Text = "";
+            }
+
+            unit_of_measure.Content = "Единица измерения: " + GoodExemplar.Unit_of_measure;
+            count.Content = "Количество на складе: " + GoodExemplar.Count.ToString();
+            discount.Content = GoodExemplar.Discount.ToString() + "%";
+
+            if (GoodExemplar.Discount > 15)
+            {
+                discountBorder.Background = (Brush)Application.Current.Resources["BigDiscountBrush"];
+            }
+
+            if (!(GoodExemplar.Photo is null))
+            {
+                photo.Source = new BitmapImage(new Uri($"pack://application:,,,/pictures/{GoodExemplar.Photo}", UriKind.Absolute));
+            }
+
+        }
+
         public ItemUserControl(Good good, string role)
         {
             InitializeComponent();
             GoodExemplar = good;
 
-            if (role != "Администратор")
+            if (role == "Администратор")
             {
-                Edit.Visibility = Visibility.Collapsed;
+                ItemFragment.MouseDoubleClick += Edit_Click;
             }
 
-            title.Content = good.Category + " | " + good.Label;
-            description.Content = "Описание товара: " + good.Desctiption;
-            fabric.Content = "Производитель: " + good.Fabric;
-            provider.Content = "Поставщик: " + good.Provider;
-
-            if (good.Discount > 0)
-            {
-                decimal newPrice = (decimal)good.Price - ((decimal)good.Price * ((decimal)good.Discount / 100));
-                price.Text = good.Price.ToString();
-                price.TextDecorations = TextDecorations.Strikethrough;
-                price.Foreground = Brushes.Red;
-                priceDiscount.Text = newPrice.ToString();
-
-            } 
-            else
-            {
-                price.Text = good.Price.ToString();
-                priceDiscount.Text = "";
-            }
-
-            unit_of_measure.Content = "Единица измерения: " + good.Unit_of_measure;
-            count.Content = "Количество на складе: " + good.Count.ToString();
-            discount.Content = good.Discount.ToString() + "%";
-
-            if (good.Discount > 15)
-            {
-                discountBorder.Background = (Brush)Application.Current.Resources["BigDiscountBrush"];
-            }
-
-            if(!(good.Photo is null))
-            {
-                photo.Source = new BitmapImage(new Uri($"pack://application:,,,/pictures/{good.Photo}", UriKind.Absolute));
-            }
+            RefreshItem();
         }
+
+        
 
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
             CrudGoodsWindow editWindow = new CrudGoodsWindow(GoodExemplar);
+            editWindow.Closed += (s, args) => Edited?.Invoke();
             editWindow.Show();
         }
     }

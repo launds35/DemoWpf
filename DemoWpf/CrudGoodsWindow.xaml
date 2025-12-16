@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DemoWpf"
         mc:Ignorable="d"
-        Title="Добавление товара" Height="450" Width="800" Icon="/Icon.ico">
+        Title="Добавление товара" Height="450" Width="800" Icon="/Icon.ico" Topmost="True">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -50,7 +50,7 @@
             <TextBox x:Name="Price" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" Margin="0,15,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="180" FontFamily="Times New Roman"/>
 
             <Label Grid.Row="1" Grid.Column="3" Content="Единица измерения" HorizontalAlignment="Left" Margin="7,0,0,0" VerticalAlignment="Top" Height="27" FontFamily="Times New Roman"/>
-            <ComboBox x:Name="UnitOfMeasure" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" Margin="0,17,0,0" VerticalAlignment="Center" Width="180" FontFamily="Times New Roman"/>
+            <TextBox x:Name="UnitOfMeasure" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" Margin="0,15,0,0" VerticalAlignment="Center" Width="180" FontFamily="Times New Roman"/>
 
 
             <Label Grid.Row="2" Grid.Column="0" Content="Количество" HorizontalAlignment="Left" Margin="7,0,0,0" VerticalAlignment="Top" Height="27" FontFamily="Times New Roman"/>
@@ -58,7 +58,7 @@
 
             <Label Grid.Row="2" Grid.Column="1" Content="Скидка" HorizontalAlignment="Left" Margin="7,0,0,0" VerticalAlignment="Top" Height="27" FontFamily="Times New Roman"/>
             <TextBox x:Name="Discount" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Margin="0,15,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="180" FontFamily="Times New Roman"/>
-            <Button x:Name="AddButton" Grid.Column="3" Content="Добавить" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Height="26" Width="180" FontFamily="Times New Roman" Background="{DynamicResource AccentBrush}"/>
+            <Button x:Name="AddButton" Grid.Column="3" Content="Добавить" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Height="26" Width="180" FontFamily="Times New Roman" Background="{DynamicResource AccentBrush}" Click="AddButton_Click"/>
 
         </Grid>
 

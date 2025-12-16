@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Reflection.Emit;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Documents;
 
@@ -54,66 +55,261 @@ namespace DemoWpf.Data
 
         public static List<ComboBoxItems> GetCategories()
         {
-           var list = new List<ComboBoxItems>();
-
-            using (SqlConnection conn = Db.GetConnection())
-            {
-                conn.Open();
-
-                string sql = @"SELECT id_category, category_name FROM categories";
-
-                SqlCommand cmd = new SqlCommand(sql, conn);
-
-                using (SqlDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        list.Add(new ComboBoxItems
-                        {
-                            Id = reader.GetInt32(0),
-                            Name = reader.GetString(1)
-                        });
-                    }
-                }
-
-                return list;
-            }
-
-            throw new Exception("Не удалось получить ID");
-        }
-
-        public static bool AddGood(Good good)
-        {
+            var list = new List<ComboBoxItems>();
             try
             {
                 using (SqlConnection conn = Db.GetConnection())
                 {
                     conn.Open();
 
-                    string sql =
-                        @"INTERT categories (category_name) VALUES (@good.category);
-                        INSERT labels (label) VALUES (@good.label);
-                        INSERT providers (provider_name) VALUES (@good.provider);
-                        INSERT fabrics (fabric) VALUES (@good.fabric);
-                        INSERT goods (article, id_category) VALUES (@good.fabric);";
-
+                    string sql = @"SELECT id_category, category_name FROM categories";
 
                     SqlCommand cmd = new SqlCommand(sql, conn);
 
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            list.Add(new ComboBoxItems
+                            {
+                                Id = reader.IsDBNull(0) ? 0 : reader.GetInt32(0),
+                                Name = reader.IsDBNull(1) ? null : reader.GetString(1)
+                            });
+                        }
+                    }
 
-                    conn.Close();
+                    return list;
                 }
-
-                return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при добавлении записи: {ex.Message}", "Ошибка при работе с БД");
-                return false;
+                MessageBox.Show($"Error: {ex}");
             }
+            
 
+            throw new Exception("Не удалось получить ID");
         }
 
+        public static List<ComboBoxItems> GetFabrics()
+        {
+            var list = new List<ComboBoxItems>();
+            try
+            {
+                using (SqlConnection conn = Db.GetConnection())
+                {
+                    conn.Open();
+
+                    string sql = @"SELECT id_fabric, fabric FROM fabrics";
+
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            list.Add(new ComboBoxItems
+                            {
+                                Id = reader.IsDBNull(0) ? 0 : reader.GetInt32(0),
+                                Name = reader.IsDBNull(1) ? null : reader.GetString(1)
+                            });
+                        }
+                    }
+
+                    return list;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex}");
+            }
+
+
+            throw new Exception("Не удалось получить ID");
+        }
+
+
+        public static List<ComboBoxItems> GetLabels()
+        {
+            var list = new List<ComboBoxItems>();
+            try
+            {
+                using (SqlConnection conn = Db.GetConnection())
+                {
+                    conn.Open();
+
+                    string sql = @"SELECT id_label, label FROM labels";
+
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            list.Add(new ComboBoxItems
+                            {
+                                Id = reader.IsDBNull(0) ? 0 : reader.GetInt32(0),
+                                Name = reader.IsDBNull(1) ? null : reader.GetString(1)
+                            });
+                        }
+                    }
+
+                    return list;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex}");
+            }
+
+
+            throw new Exception("Не удалось получить ID");
+        }
+
+        public static List<ComboBoxItems> GetProviders()
+        {
+            var list = new List<ComboBoxItems>();
+            try
+            {
+                using (SqlConnection conn = Db.GetConnection())
+                {
+                    conn.Open();
+
+                    string sql = @"SELECT id_provider, provider_name FROM providers";
+
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            list.Add(new ComboBoxItems
+                            {
+                                Id = reader.IsDBNull(0) ? 0 : reader.GetInt32(0),
+                                Name = reader.IsDBNull(1) ? null : reader.GetString(1)
+                            });
+                        }
+                    }
+
+                    return list;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex}");
+            }
+
+
+            throw new Exception("Не удалось получить ID");
+        }
+
+        public static bool AddGood(string article, int idCategory, int idLabel,
+                                      string description, int idFabric, int idProvider,
+                                      double price, string unitOfMeasure, int count, double discount)
+        {
+            try
+            {
+                using (SqlConnection connection = Db.GetConnection())
+                {
+                    connection.Open();
+
+                    string sql = @"INSERT INTO goods (
+                                   article, id_category, id_label, 
+                                   description, id_fabric, id_provider, price,
+                                   unit_of_measure, count, sale)
+                                   VALUES (@article, @id_category, @id_label, 
+                                   @description, @id_fabric, @id_provider, @price,
+                                   @unit_of_measure, @count, @sale)";
+
+
+                    SqlCommand cmd = new SqlCommand(sql, connection);
+                    cmd.Parameters.AddWithValue("@article", article);
+                    cmd.Parameters.AddWithValue("@id_category", idCategory);
+                    cmd.Parameters.AddWithValue("@id_label", idLabel);
+                    cmd.Parameters.AddWithValue("@description", description);
+                    cmd.Parameters.AddWithValue("@id_fabric", idFabric);
+                    cmd.Parameters.AddWithValue("@id_provider", idProvider);
+                    cmd.Parameters.AddWithValue("@price", price);
+                    cmd.Parameters.AddWithValue("@unit_of_measure", unitOfMeasure);
+                    cmd.Parameters.AddWithValue("@count", count);
+                    cmd.Parameters.AddWithValue("@sale", discount);
+                    int row_affected = cmd.ExecuteNonQuery();
+
+                    return row_affected > 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка обновления: {ex}");
+                return false;
+            }
+        }
+
+        public static void DeleteGood(string article)
+        {
+            try
+            {
+                using (SqlConnection connection = Db.GetConnection())
+                {
+                    connection.Open();
+
+                    string sql = @"DELETE FROM TABLE goods WHERE goods.article = @article";
+
+                    SqlCommand cmd = new SqlCommand(sql, connection);
+                    cmd.Parameters.AddWithValue("@article", article);
+                    int row_affected = cmd.ExecuteNonQuery();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка обновления: {ex}");
+            }
+        }
+
+        public static bool UpdateGood(string article, string newArticle, int idCategory, int idLabel, 
+                                      string description, int idFabric, int idProvider, 
+                                      double price, string unitOfMeasure, int count, double discount)
+        {
+            try
+            {
+                using (SqlConnection connection = Db.GetConnection())
+                {
+                    connection.Open();
+
+                    string sql = @"UPDATE goods 
+                                   SET article = @newArticle, id_category = @id_category, id_label = @id_label, 
+                                   description = @description, id_fabric = @id_fabric, id_provider = @id_provider, price = @price,
+                                   unit_of_measure = @unit_of_measure, count = @count, sale = @sale
+                                   WHERE article = @article";
+
+                    SqlCommand cmd = new SqlCommand(sql, connection);
+                    cmd.Parameters.AddWithValue("@article", article);
+                    cmd.Parameters.AddWithValue("@newArticle", newArticle);
+                    cmd.Parameters.AddWithValue("@id_category", idCategory);
+                    cmd.Parameters.AddWithValue("@id_label", idLabel);
+                    cmd.Parameters.AddWithValue("@description", description);
+                    cmd.Parameters.AddWithValue("@id_fabric", idFabric);
+                    cmd.Parameters.AddWithValue("@id_provider", idProvider);
+                    cmd.Parameters.AddWithValue("@price", price);
+                    cmd.Parameters.AddWithValue("@unit_of_measure", unitOfMeasure);
+                    cmd.Parameters.AddWithValue("@count", count);
+                    cmd.Parameters.AddWithValue("@sale", discount);
+
+                    int row_affected = cmd.ExecuteNonQuery();
+
+                    return row_affected > 0;
+                }
+
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка обновления: {ex}");
+                return false;
+            }
+        }
         public static List<Good> GetGoodsList()
         {
             var list = new List<Good>();

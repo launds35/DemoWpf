@@ -41,6 +41,19 @@ namespace DemoWpf
             RenderItems();
         }
 
+        private void LoadGoods()
+        {
+            ItemsPanel.Children.Clear();
+
+            Goods = DbHelpers.GetGoodsList();
+            foreach (Good good in Goods)
+            {
+                var item = new ItemUserControl(good, Role);
+                item.Edited += LoadGoods;
+                ItemsPanel.Children.Add(item);
+            }
+        }
+
         private bool FilterGoods(object obj)
         {
             if(!(obj is Good good))
@@ -69,10 +82,11 @@ namespace DemoWpf
         private void RenderItems()
         {
             ItemsPanel.Children.Clear();
-
             foreach (Good good in goodsView)
             {
-                ItemsPanel.Children.Add(new ItemUserControl(good, Role));
+                var item = new ItemUserControl(good, Role);
+                item.Edited += LoadGoods;
+                ItemsPanel.Children.Add(item);
             }
         }
 
@@ -80,9 +94,10 @@ namespace DemoWpf
         {
             if (role == null)
             {
-                SearchBox.Visibility = Visibility.Hidden;
+                SearchBox.Visibility = Visibility.Collapsed;
                 this.Title = "Главное окно (Гость)";
-                fioLabel.Visibility = Visibility.Hidden;
+                fioLabel.Visibility = Visibility.Collapsed;
+                Add.Visibility = Visibility.Collapsed;
                 backButton.Content = "Назад";
             }
             else if (role == "Администратор")
@@ -93,13 +108,16 @@ namespace DemoWpf
             else if (role == "Менеджер") 
             {
                 this.Title = "Главное окно (Менеджер)";
-            } 
+                Add.Visibility = Visibility.Collapsed;
+
+            }
             else if (role == "Авторизированный клиент")
             {
                 this.Title = "Главное окно (Авторизированный клиент)";
+                Add.Visibility = Visibility.Collapsed;
 
             }
-            
+
         }
 
         private void backButton_Click(object sender, RoutedEventArgs e)
@@ -110,7 +128,9 @@ namespace DemoWpf
         private void Add_Click(object sender, RoutedEventArgs e)
         {
             CrudGoodsWindow addWindow = new CrudGoodsWindow(null);
+            addWindow.Closed += (s, args) => LoadGoods();
             addWindow.Show();
+            
         }
     }
 }
